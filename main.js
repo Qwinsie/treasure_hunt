@@ -1,8 +1,8 @@
 let players = 0
 let level = 0
 
-const maxPlayers = 4
-const levels = 2
+const maxPlayers = 6
+const levels = 1
 const colors = ["red", "blue", "green", "yellow", "purple", "orange"]
 
 init()
@@ -132,6 +132,51 @@ function giveClues(level, playerAmount, color) {
                 default:
                 break;
             }
+            break;
+        case 5:
+            switch (color) {
+                case "red":
+                    clues = clues.slice(0, 2)
+                break;
+                case "blue":
+                    clues = clues.slice(2, 4)
+                break;
+                case "green":
+                    clues = clues.slice(4, 6)
+                break;
+                case "yellow":
+                    clues = clues.slice(6, 7)
+                break;
+                case "purple":
+                    clues = clues.slice(7, 8)
+                break;
+                default:
+                break;
+            }
+            break;
+        case 6:
+            switch (color) {
+                case "red":
+                    clues = clues.slice(0, 2)
+                break;
+                case "blue":
+                    clues = clues.slice(2, 4)
+                break;
+                case "green":
+                    clues = clues.slice(4, 5)
+                break;
+                case "yellow":
+                    clues = clues.slice(5, 6)
+                break;
+                case "purple":
+                    clues = clues.slice(6, 7)
+                break;
+                case "orange":
+                    clues = clues.slice(7, 8)
+                break;
+                default:
+                break;
+            }
         default:
         break;
     }
@@ -141,12 +186,56 @@ function giveClues(level, playerAmount, color) {
         const li = document.createElement("li")
 
         const img = document.createElement('img');
-        img.setAttribute("src", `./src/clues/${clue}.jpeg`)
+        img.setAttribute("src", `./src/clues/${clue}.png`)
         li.append(img)
         ul.append(li)
     }
 
     console.log("Clues given");
+
+    let form = document.createElement('form')
+    document.body.append(form)
+
+    let btn = document.createElement('button');
+    btn.innerHTML = `Check Guess`
+    form.append(btn)
+
+    btn.addEventListener('click', function checkSolution(e) {
+        e.preventDefault()
+        ul.remove()
+        form.remove()
+        const solutions = [1,2,3]
+
+        ul = document.createElement("ul")
+        document.body.append(ul)
+        for (const solution of shuffle(solutions)) {
+            console.log("solutions "+ solutions);
+            const li = document.createElement("li")
+    
+            const img = document.createElement('img');
+            img.setAttribute("src", `./src/solutions/${solution}.png`)
+            li.append(img)
+            ul.append(li)
+        }
+    })
+}
+
+function checkGuess() {
+    let form = document.createElement('form')
+    document.body.append(form)
+
+    let btn = document.createElement('button');
+    btn.style.backgroundColor= colors[i]
+    btn.innerHTML = `Check Guess`
+    form.append(btn)
+
+    btn.addEventListener('click', function selectedColor(e) {
+        e.preventDefault()
+        let color = e.target.value
+        console.log("Chosen Color: " + color);
+        form.remove()
+        giveClues(level, playerAmount, color)
+    })
 }
 
 function shuffle(array) {
