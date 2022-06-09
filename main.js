@@ -34,6 +34,10 @@ function selectTotalPlayers(level) {
     let form = document.createElement('form')
     document.body.append(form)
 
+    let backbtn = document.createElement('button');
+    backbtn.innerHTML = `Back`
+    form.append(backbtn)
+
     for (let i = 2; i < maxPlayers+1; i++) {
         let button = document.createElement('button');
         button.setAttribute('value',`${i}`);
@@ -48,11 +52,21 @@ function selectTotalPlayers(level) {
             selectColor(level, i)
         })
     }
+
+    backbtn.addEventListener('click', function goBack(e) {
+        e.preventDefault()
+        form.remove()
+        selectLevel()
+    })
 }
 
 function selectColor(level, playerAmount) {
     let form = document.createElement('form')
     document.body.append(form)
+
+    let backbtn = document.createElement('button');
+    backbtn.innerHTML = `Back`
+    form.append(backbtn)
 
     for (let i = 0; i < playerAmount; i++) {
         let btn = document.createElement('button');
@@ -69,6 +83,12 @@ function selectColor(level, playerAmount) {
             giveClues(level, playerAmount, color)
         })
     }
+
+    backbtn.addEventListener('click', function goBack(e) {
+        e.preventDefault()
+        form.remove()
+        selectTotalPlayers(level)
+    })
 }
 
 function giveClues(level, playerAmount, color) {
@@ -78,6 +98,10 @@ function giveClues(level, playerAmount, color) {
     let ul = document.createElement("ul")
     document.body.append(ul)
     console.log(playerAmount, color);
+
+    let backbtn = document.createElement('button');
+    backbtn.innerHTML = `Back`
+    ul.append(backbtn)
 
     switch (playerAmount) {
         case 1:
@@ -191,13 +215,24 @@ function giveClues(level, playerAmount, color) {
         ul.append(li)
     }
 
+
+
     console.log("Clues given");
 
     let form = document.createElement('form')
     document.body.append(form)
 
+    let notes = document.createElement('textarea');
+    notes.ariaPlaceholder = `Write Notes...`
+    notes.setAttribute("rows", 8)
+    notes.setAttribute("cols", 40)
+    form.append(notes)
+
+    let breakEl = document.createElement('br')
+    form.append(breakEl)
+
     let btn = document.createElement('button');
-    btn.innerHTML = `Check Guess`
+    btn.innerHTML = `Make Guess`
     form.append(btn)
 
     btn.addEventListener('click', function checkSolution(e) {
@@ -217,6 +252,13 @@ function giveClues(level, playerAmount, color) {
             li.append(img)
             ul.append(li)
         }
+    })
+
+    backbtn.addEventListener('click', function goBack(e) {
+        e.preventDefault()
+        ul.remove()
+        form.remove()
+        selectColor(level, playerAmount)
     })
 }
 
