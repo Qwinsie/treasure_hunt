@@ -4,6 +4,7 @@ let level = 0
 const maxPlayers = 6
 const levels = 1
 const colors = ["red", "blue", "green", "yellow", "purple", "orange"]
+let allTreasuresFound = 0
 
 init()
 function init() {
@@ -17,7 +18,7 @@ function selectLevel() {
     for (let i = 1; i < levels+1; i++) {
         let button = document.createElement('button');
         button.setAttribute('value',`${i}`);
-        button.innerHTML = `Level ${i}`
+        button.textContent = `Level ${i}`
         form.append(button)
 
         button.addEventListener('click', function selectedLevel(e) {
@@ -34,10 +35,14 @@ function selectTotalPlayers(level) {
     let form = document.createElement('form')
     document.body.append(form)
 
+    let backbtn = document.createElement('button');
+    backbtn.textContent = `Back`
+    form.append(backbtn)
+
     for (let i = 2; i < maxPlayers+1; i++) {
         let button = document.createElement('button');
         button.setAttribute('value',`${i}`);
-        button.innerHTML = `${i} Players`
+        button.textContent = `${i} Players`
         form.append(button)
 
         button.addEventListener('click', function selectedTotalPlayers(e) {
@@ -48,17 +53,27 @@ function selectTotalPlayers(level) {
             selectColor(level, i)
         })
     }
+
+    backbtn.addEventListener('click', function goBack(e) {
+        e.preventDefault()
+        form.remove()
+        selectLevel()
+    })
 }
 
 function selectColor(level, playerAmount) {
     let form = document.createElement('form')
     document.body.append(form)
 
+    let backbtn = document.createElement('button');
+    backbtn.textContent = `Back`
+    form.append(backbtn)
+
     for (let i = 0; i < playerAmount; i++) {
         let btn = document.createElement('button');
         btn.setAttribute('value',`${colors[i]}`);
         btn.style.backgroundColor= colors[i]
-        btn.innerHTML = `${colors[i]}`
+        btn.textContent = `${colors[i]}`
         form.append(btn)
 
         btn.addEventListener('click', function selectedColor(e) {
@@ -66,18 +81,40 @@ function selectColor(level, playerAmount) {
             let color = e.target.value
             console.log("Chosen Color: " + color);
             form.remove()
-            giveClues(level, playerAmount, color)
+            giveClues(level, playerAmount, color, false)
         })
     }
+
+    backbtn.addEventListener('click', function goBack(e) {
+        e.preventDefault()
+        form.remove()
+        selectTotalPlayers(level)
+    })
 }
 
-function giveClues(level, playerAmount, color) {
+function giveClues(level, playerAmount, color, notes) {
     let clues = [1,2,3,4,5,6,7,8] // slice
     let clueAmount = clues.length / playerAmount
+    let section
+
+    if (!notes) {
+        section = document.createElement('section')
+        document.body.append(section)
+    
+        let notes = document.createElement('textarea');
+        notes.setAttribute("placeholder", `Write Notes...`)
+        notes.setAttribute("rows", 8)
+        notes.setAttribute("cols", 40)
+        section.append(notes)
+    }
 
     let ul = document.createElement("ul")
     document.body.append(ul)
     console.log(playerAmount, color);
+
+    let backbtn = document.createElement('button');
+    backbtn.textContent = `Back`
+    ul.append(backbtn)
 
     switch (playerAmount) {
         case 1:
@@ -197,11 +234,28 @@ function giveClues(level, playerAmount, color) {
     document.body.append(form)
 
     let btn = document.createElement('button');
-    btn.innerHTML = `Check Guess`
+    btn.textContent = `Make Guess`
     form.append(btn)
 
-    btn.addEventListener('click', function checkSolution(e) {
+    let breakEl = document.createElement('br')
+    form.append(breakEl)
+
+    btn.addEventListener('click', function clicked(e) {
         e.preventDefault()
+        ul.remove()
+        form.remove()
+        checkGuess(level, playerAmount, color)
+    })
+
+    backbtn.addEventListener('click', function goBack(e) {
+        e.preventDefault()
+        ul.remove()
+        section.remove()
+        form.remove()
+        selectColor(level, playerAmount)
+    })
+
+    if(allTreasuresFound) {
         ul.remove()
         form.remove()
         const solutions = [1,2,3]
@@ -217,28 +271,233 @@ function giveClues(level, playerAmount, color) {
             li.append(img)
             ul.append(li)
         }
-    })
+    }  
 }
 
-function checkGuess() {
+function checkGuess(level, playerAmount, color) {
+
     let form = document.createElement('form')
     document.body.append(form)
 
-    let btn = document.createElement('button');
-    btn.style.backgroundColor= colors[i]
-    btn.innerHTML = `Check Guess`
-    form.append(btn)
+    let backbtn = document.createElement('button');
+    backbtn.textContent = `Back`
+    form.append(backbtn)
 
-    btn.addEventListener('click', function selectedColor(e) {
+    const islands = ["coconut", "crab", "shell"]
+
+    const types = [
+        {
+            "coconut": [
+                {
+                    index: 1,
+                    correct: false
+                },
+                {
+                    index: 2,
+                    correct: false
+                },
+                {
+                    index: 3,
+                    correct: false
+                },
+                {
+                    index: 4,
+                    correct: false
+                },
+                {
+                    index: 5,
+                    correct: true
+                },
+                {
+                    index: 6,
+                    correct: false
+                },
+                {
+                    index: 7,
+                    correct: false
+                },
+                {
+                    index: 8,
+                    correct: false
+                },
+                {
+                    index: 9,
+                    correct: false
+                },
+            ],
+            "crab": [
+                {
+                    index: 1,
+                    correct: false
+                },
+                {
+                    index: 2,
+                    correct: false
+                },
+                {
+                    index: 3,
+                    correct: true
+                },
+                {
+                    index: 4,
+                    correct: false
+                },
+                {
+                    index: 5,
+                    correct: false
+                },
+                {
+                    index: 6,
+                    correct: false
+                },
+                {
+                    index: 7,
+                    correct: false
+                },
+                {
+                    index: 8,
+                    correct: false
+                },
+                {
+                    index: 9,
+                    correct: false
+                },
+            ],
+            "shell": [
+                {
+                    index: 1,
+                    correct: false
+                },
+                {
+                    index: 2,
+                    correct: false
+                },
+                {
+                    index: 3,
+                    correct: false
+                },
+                {
+                    index: 4,
+                    correct: false  
+                },
+                {
+                    index: 5,
+                    correct: false
+                },
+                {
+                    index: 6,
+                    correct: false
+                },
+                {
+                    index: 7,
+                    correct: true
+                },
+                {
+                    index: 8,
+                    correct: false
+                },
+                {
+                    index: 9,
+                    correct: false
+                },
+            ],
+        },
+    ]
+
+    backbtn.addEventListener('click', function goBack(e) {
         e.preventDefault()
-        let color = e.target.value
-        console.log("Chosen Color: " + color);
         form.remove()
-        giveClues(level, playerAmount, color)
+        giveClues(level, playerAmount, color, true)
     })
+
+    for (const island of islands) {
+        let btn = document.createElement('button');
+        btn.textContent = `${island} Island`
+        form.append(btn)
+
+        btn.addEventListener('click', function showGuesses(e) {
+            e.preventDefault()
+            form.remove()
+
+            const li = document.createElement("li")
+            ul = document.createElement("ul")
+            document.body.append(ul)
+
+            for (let i = 1; i <= 9; i++) {
+                const img = document.createElement('img');
+                img.setAttribute("src", `./src/guesses/${island}/${i}.png`)
+                img.setAttribute("value", `${island}`)
+                img.setAttribute("id", `${i}`)
+                li.append(img)
+                ul.append(li)
+                
+                img.addEventListener('click', function chooseGuess(e) {
+                    e.preventDefault()
+                    console.log(e.target.attributes[1].value);
+                    console.log(e.target.attributes[2].value);
+                    
+                   
+
+                    if (checkAnswer(e)) {
+                        while (li.hasChildNodes()) {
+                            li.removeChild(li.firstChild);
+                        }
+                        const result = document.createElement("h3")
+                        result.textContent = `Congratulations you found the Treasure`
+                        
+                        let backbtn = document.createElement('button');
+                        backbtn.textContent = `Back`
+                        li.append(backbtn)
+
+                        li.append(result)
+                        li.append(e.target)
+                        allTreasuresFound++
+
+                        backbtn.addEventListener('click', function goBack(e) {
+                            e.preventDefault()
+                            form.remove()
+                            ul.remove()
+                            console.log("Go Back to Clues");
+                            giveClues(level, playerAmount, color, true)
+                        })
+
+                    } else {
+                        while (li.hasChildNodes()) {
+                            li.removeChild(li.firstChild);
+                        }
+                        const result = document.createElement("h3")
+                        result.textContent = `No Treasure`
+
+                        let backbtn = document.createElement('button');
+                        backbtn.textContent = `Back`
+                        li.append(backbtn)
+
+                        li.append(result)
+                        li.append(e.target)
+
+                        backbtn.addEventListener('click', function goBack(e) {
+                            e.preventDefault()
+                            form.remove()
+                            ul.remove()
+                            console.log("Go Back to Clues");
+                            giveClues(level, playerAmount, color, true)
+                        })
+                    }
+                })  
+            }
+        })
+    }
 }
 
-function shuffle(array) {
+    function checkAnswer(e) {
+        if (e.target.attributes[1].value == "coconut" && e.target.attributes[2].value != 5) return false
+        if (e.target.attributes[1].value == "crab" && e.target.attributes[2] != 3) return false
+        if (e.target.attributes[1].value == "shell" && e.target.attributes[2] != 7) return false
+
+        return true
+    }
+    
+    function shuffle(array) {
     var m = array.length, t, i;
   
     // While there remain elements to shuffle…
