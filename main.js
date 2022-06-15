@@ -92,12 +92,12 @@ function selectColor(level, playerAmount) {
     })
 }
 
-function giveClues(level, playerAmount, color, notes) {
+function giveClues(level, playerAmount, color, notesCheck) {
     let clues = [1,2,3,4,5,6,7,8] // slice
     let clueAmount = clues.length / playerAmount
     let section
 
-    if (!notes) {
+    if (!notesCheck) {
         section = document.createElement('section')
         document.body.append(section)
     
@@ -250,7 +250,9 @@ function giveClues(level, playerAmount, color, notes) {
     backbtn.addEventListener('click', function goBack(e) {
         e.preventDefault()
         ul.remove()
-        section.remove()
+        if(!notesCheck) {
+            section.remove()
+        }
         form.remove()
         selectColor(level, playerAmount)
     })
