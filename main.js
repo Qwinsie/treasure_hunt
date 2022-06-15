@@ -425,6 +425,19 @@ function checkGuess(level, playerAmount, color) {
             ul = document.createElement("ul")
             document.body.append(ul)
 
+            let backbtn = document.createElement('button');
+            backbtn.textContent = `Back`
+            ul.append(backbtn)
+
+
+            backbtn.addEventListener('click', function goBack(e) {
+                e.preventDefault()
+                form.remove()
+                ul.remove()
+                console.log("Go Back to Clues");
+                giveClues(level, playerAmount, color, true)
+            })
+
             for (let i = 1; i <= 9; i++) {
                 const img = document.createElement('img');
                 img.setAttribute("src", `./src/guesses/${island}/${i}.png`)
