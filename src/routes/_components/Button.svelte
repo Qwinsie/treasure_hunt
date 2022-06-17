@@ -1,0 +1,26 @@
+<script>
+  export let title;
+</script>
+
+<button class="button">{title}</button>
+
+<style>
+  button {
+    background-color: #f4511e;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 1;
+  }
+</style>
