@@ -1,3 +1,11 @@
+import App from '';
+import './helper.js';
+
+var app = new App({
+    target: document.body
+});
+export default app;
+
 let players = 0;
 let level = 0;
 
