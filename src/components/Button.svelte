@@ -1,10 +1,8 @@
 <script>
-    // export const Button;
+  // export const Button;
 </script>
 
-<button class="button"></button>
+<button class="button">Test</button>
 
 <style>
-
-
 </style>
